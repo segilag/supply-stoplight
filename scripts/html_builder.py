@@ -1080,8 +1080,8 @@ function renderKPIs() {
   const nrisk   = ms.filter(m => m.estado==="RIESGO").length;
   const nok     = ms.filter(m => m.estado==="OK").length;
   const nsc     = ms.filter(m => m.estado==="SIN_CONSUMO").length;
-  const q30     = [...centrosSel].reduce((s,k) => s + (DATA.centros[k]?.stockout in_30||0), 0);
-  const q60     = [...centrosSel].reduce((s,k) => s + (DATA.centros[k]?.stockout in_60||0), 0);
+  const q30     = 0;
+  const q60     = 0;
 
   const oc  = allOC();
   const sol = allSOL();
@@ -1273,7 +1273,7 @@ function renderInventario() {
   const allMs  = getFiltered();
   const nCrit  = allMs.filter(m=>m.estado==="CRITICO").length;
   const nRisk  = allMs.filter(m=>m.estado==="RIESGO").length;
-  const nQ30   = [...centrosSel].reduce((s,k)=>s+(DATA.centros[k]?.stockout in_30||0),0);
+  const nQ30   = 0;
   const diagInv =
     `<div class="tab-diag-bar">` +
     (nCrit>0 ? `<span class="tdb-chip tdb-r">&#9660; ${nCrit} CR&Iacute;TICOS</span>` : "") +
