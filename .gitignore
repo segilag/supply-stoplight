@@ -1,0 +1,45 @@
+# ── Real data files (sensitive - not for public repo) ────────────────────────
+Datos/*.xlsx
+Datos/*.xls
+Datos/0. Base/
+!Datos/demo/
+!Datos/demo/**
+
+# ── Generated output HTML ────────────────────────────────────────────────────
+supply_stoplight.html
+supply_planner_v5.html
+
+# ── Logs ────────────────────────────────────────────────────────────────────
+logs/
+*.log
+
+# ── Config with credentials ─────────────────────────────────────────────────
+config/email_config.json
+config/Supply_Planner
+.env
+*.env
+
+# ── Claude Code IDE settings (local paths) ──────────────────────────────────
+.claude/settings.json
+.claude/settings.local.json
+
+# ── Office / temp files ──────────────────────────────────────────────────────
+*.docx
+*.pptx
+*.code-workspace
+
+# ── Python cache ─────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+
+# ── OS / Editor ──────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Temp / backup ────────────────────────────────────────────────────────────
+*.tmp
+*.bak
+~$*
