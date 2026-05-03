@@ -435,13 +435,13 @@ body{background:var(--bg0);color:var(--tx1);font-family:'Inter',sans-serif;font-
   <div class="logo">supply<span>.</span>stoplight <span style="color:var(--tx3);font-size:12px">v5</span></div>
   <div class="cut-info">Stock: <b id="meta-saldo"></b> &nbsp;·&nbsp; ERP: <b id="meta-b2wise"></b> &nbsp;·&nbsp; <b id="meta-mes"></b> &nbsp;·&nbsp; <b id="meta-centro-nom"></b></div>
   <div class="topbar-right">
-    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Cambiar tema"></button>
-    <button class="btn mob-sidebar-toggle" id="mob-toggle-btn" onclick="toggleMobSidebar()" style="display:none">&#9776; Materiales</button>
+    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle theme"></button>
+    <button class="btn mob-sidebar-toggle" id="mob-toggle-btn" onclick="toggleMobSidebar()" style="display:none">&#9776; Materials</button>
     <div class="rpt-menu-wrap" id="rpt-menu-wrap">
-      <button class="btn" onclick="toggleRptMenu(event)">&#128196; &#128202; Descargar Reporte &#9662;</button>
+      <button class="btn" onclick="toggleRptMenu(event)">&#128196; &#128202; Download Report &#9662;</button>
       <div class="rpt-dropdown" id="rpt-dropdown" style="display:none">
-        <div class="rpt-dd-item" onclick="closeRptMenu();openReportModal()">&#128196; Reporte PDF / Excel completo</div>
-        <div class="rpt-dd-item rpt-dd-item-imp" onclick="closeRptMenu();exportImpactosExcel()">&#128203; Reporte Impactos Planners</div>
+        <div class="rpt-dd-item" onclick="closeRptMenu();openReportModal()">&#128196; PDF / Excel Report</div>
+        <div class="rpt-dd-item rpt-dd-item-imp" onclick="closeRptMenu();exportImpactosExcel()">&#128203; Impact Report</div>
       </div>
     </div>
   </div>
@@ -451,15 +451,15 @@ body{background:var(--bg0);color:var(--tx1);font-family:'Inter',sans-serif;font-
 <div class="country-bar" id="country-bar"></div>
 <!-- Centro dropdown filter -->
 <div class="centro-filter-bar">
-  <span class="centro-filter-lbl">Centro:</span>
+  <span class="centro-filter-lbl">Plant:</span>
   <div class="centro-dd" id="centro-dd">
     <button class="centro-dd-btn" id="centro-dd-btn" onclick="toggleCentroDDPanel(event)">
-      <span class="dd-label" id="centro-dd-label">Todos los centros</span>
+      <span class="dd-label" id="centro-dd-label">All plants</span>
       <span class="dd-arrow">&#9660;</span>
     </button>
   </div>
   <div class="centro-dd-panel" id="centro-dd-panel">
-    <input class="centro-dd-search" id="centro-dd-search" placeholder="&#128269; Buscar centro..." oninput="centroDDFilter(this.value)">
+    <input class="centro-dd-search" id="centro-dd-search" placeholder="&#128269; Search plant..." oninput="centroDDFilter(this.value)">
     <div class="centro-dd-scroll" id="centro-dd-scroll"></div>
   </div>
 </div>
@@ -476,7 +476,7 @@ body{background:var(--bg0);color:var(--tx1);font-family:'Inter',sans-serif;font-
     <!-- Badge filtros activos -->
     <div class="active-filters-badge" id="active-filters-badge" style="display:none">
       <span id="afb-text"></span>
-      <button class="afb-clear" onclick="clearAllFilters()" title="Limpiar todos los filtros">&#10005; Limpiar</button>
+      <button class="afb-clear" onclick="clearAllFilters()" title="Clear all filters">&#10005; Clear</button>
     </div>
     <!-- Grupo: Estado -->
     <div class="filter-group">
@@ -717,7 +717,7 @@ function buildMselPanel(panelId, btnId, items, selSet, onChangeFn, searchPh) {
   </div>`;
   const allRow = `<label class="msel-item${allChecked?" checked":""}" style="border-bottom:1px solid var(--border,#2e2e2e);margin-bottom:2px">
     <input type="checkbox" ${allChecked?"checked":""} onchange="${onChangeFn}(null)">
-    <span style="font-weight:600">Todos</span>
+    <span style="font-weight:600">All</span>
   </label>`;
   const rows = items.map(v =>
     `<label class="msel-item ${selSet.has(v)?"checked":""}">` +
@@ -730,12 +730,12 @@ function buildMselPanel(panelId, btnId, items, selSet, onChangeFn, searchPh) {
   const ddLbl = btn.querySelector(".dd-label");
   if (ddLbl) {
     ddLbl.textContent = selSet.size
-      ? `${selSet.size} seleccionado${selSet.size>1?"s":""}`
+      ? `${selSet.size} selected`
       : (btn.dataset.placeholder || "");
   } else {
     btn.className = "msel-btn" + (selSet.size ? " has-sel" : "");
     btn.innerHTML = selSet.size
-      ? `${selSet.size} seleccionado${selSet.size>1?"s":""} <span class="msel-arrow">&#9660;</span>`
+      ? `${selSet.size} selected <span class="msel-arrow">&#9660;</span>`
       : (btn.dataset.placeholder||"") + ` <span class="msel-arrow">&#9660;</span>`;
   }
 }
@@ -777,7 +777,7 @@ function renderLineaSelect() {
   const lineas = [...new Set([...centrosSel].flatMap(k => DATA.centros[k]?.lineas_fab || []))].sort();
   selLinea.forEach(v => { if (!lineas.includes(v)) selLinea.delete(v); });
   const btn = document.getElementById("linea-btn");
-  if (btn) btn.dataset.placeholder = "Todas las l\u00edneas";
+  if (btn) btn.dataset.placeholder = "All lines";
   buildMselPanel("linea-panel", "linea-btn", lineas, selLinea, "toggleLineaItem", "Search line…");
 }
 
@@ -854,8 +854,8 @@ function renderCentroDDPanel() {
 
   let html = `<label class="centro-dd-all">
     <input type="checkbox" id="dd-all-cb" ${allSel?"checked":""} onchange="toggleAllCentroInDD(this)">
-    <span>Todos los centros</span>
-    <span class="dd-mat-cnt">${allKeys.length} centros</span>
+    <span>All plants</span>
+    <span class="dd-mat-cnt">${allKeys.length} plants</span>
   </label>`;
 
   for (const pais of paisList) {
@@ -1090,36 +1090,36 @@ function renderKPIs() {
   const solLib = sol.length - solSL;
 
   document.getElementById("kpi-strip").innerHTML = `
-    <div class="kpi-grp-lbl">&#128202; INVENTARIO</div>
-    <div class="kpi ${ncrit>0?"kpi-r":""}"><div class="kpi-v">${ncrit}</div><div class="kpi-l">CR&Iacute;TICO</div></div>
-    <div class="kpi ${nrisk>0?"kpi-y":""}"><div class="kpi-v">${nrisk}</div><div class="kpi-l">RIESGO</div></div>
-    <div class="kpi"><div class="kpi-v">${nok}</div><div class="kpi-l">SIN RIESGO</div></div>
-    <div class="kpi ${q30>0?"kpi-r":""}"><div class="kpi-v">${q30}</div><div class="kpi-l">QUIEBRAN &le;30d sin OC</div></div>
-    <div class="kpi ${q60>0?"kpi-y":""}"><div class="kpi-v">${q60}</div><div class="kpi-l">QUIEBRAN &le;60d sin OC</div></div>
-    ${nsc>0?`<div class="kpi kpi-sc"><div class="kpi-v">${nsc}</div><div class="kpi-l">INV. SIN CONSUMO</div></div>`:""}
+    <div class="kpi-grp-lbl">&#128202; INVENTORY</div>
+    <div class="kpi ${ncrit>0?"kpi-r":""}"><div class="kpi-v">${ncrit}</div><div class="kpi-l">CRITICAL</div></div>
+    <div class="kpi ${nrisk>0?"kpi-y":""}"><div class="kpi-v">${nrisk}</div><div class="kpi-l">AT RISK</div></div>
+    <div class="kpi"><div class="kpi-v">${nok}</div><div class="kpi-l">NO RISK</div></div>
+    <div class="kpi ${q30>0?"kpi-r":""}"><div class="kpi-v">${q30}</div><div class="kpi-l">Shortage &le;30d no PO</div></div>
+    <div class="kpi ${q60>0?"kpi-y":""}"><div class="kpi-v">${q60}</div><div class="kpi-l">Shortage &le;60d no PO</div></div>
+    ${nsc>0?`<div class="kpi kpi-sc"><div class="kpi-v">${nsc}</div><div class="kpi-l">NO DEMAND</div></div>`:""}
     <div class="kpi-sep"></div>
-    <div class="kpi-grp-lbl">&#x1F4E6; OC</div>
+    <div class="kpi-grp-lbl">&#x1F4E6; POs</div>
     <div class="kpi ${atrasadas.length>0?"kpi-r":""}">
       <div class="kpi-v">${atrasadas.length}<span class="kpi-sub"> pos.</span></div>
-      <div class="kpi-l">Atrasadas</div>
+      <div class="kpi-l">Overdue</div>
     </div>
     <div class="kpi ${porVencer.length>0?"kpi-y":""}">
       <div class="kpi-v">${porVencer.length}<span class="kpi-sub"> pos.</span></div>
-      <div class="kpi-l">Vencen &le;21d &mdash; <b>${vence7.length}</b> en &le;7d</div>
+      <div class="kpi-l">Due &le;21d &mdash; <b>${vence7.length}</b> in &le;7d</div>
     </div>
     <div class="kpi">
       <div class="kpi-v">${resto}<span class="kpi-sub"> pos.</span></div>
       <div class="kpi-l">&gt;21d</div>
     </div>
     <div class="kpi-sep"></div>
-    <div class="kpi-grp-lbl">&#x1F4CB; SOL</div>
+    <div class="kpi-grp-lbl">&#x1F4CB; PRs</div>
     <div class="kpi ${solSL>0?"kpi-r":"kpi-g"}">
       <div class="kpi-v">${solSL}</div>
       <div class="kpi-l">Unreleased</div>
     </div>
     <div class="kpi kpi-g">
       <div class="kpi-v">${solLib}</div>
-      <div class="kpi-l">Releaseds</div>
+      <div class="kpi-l">Released</div>
     </div>` ;
 }
 
@@ -1165,11 +1165,11 @@ function renderList() {
   document.getElementById("mat-list").innerHTML = ms.map(m => {
     const mini = m.sabados.slice(0,8).map(s => `<span class="mini-d ${s.color}"></span>`).join("");
     const rtag = (m.quiebre_12sem && m.estado==="CRITICO")
-      ? `<span class="quiebre-tag">&#9670; QUIEBRE &le;12S</span>`
+      ? `<span class="quiebre-tag">&#9670; SHORTAGE &le;12W</span>`
       : (m.quiebre_12sem && m.estado==="ALERTA")
-        ? `<span class="quiebre-lt-tag">&#9650; QUIEBRE + LT OK</span>`
-        : (m.riesgo_12sem ? `<span class="riesgo-tag">&#9888; 12sem</span>` : "");
-    const itag = m.importado ? `<span class="imp-tag">IMP</span>` : `<span class="nal-tag">NAL</span>`;
+        ? `<span class="quiebre-lt-tag">&#9650; SHORTAGE + LT OK</span>`
+        : (m.riesgo_12sem ? `<span class="riesgo-tag">&#9888; 12w</span>` : "");
+    const itag = m.importado ? `<span class="imp-tag">IMP</span>` : `<span class="nal-tag">DOM</span>`;
     const ltag = m.linea_fab    ? `<span class="linea-tag">${m.linea_fab}</span>` : "";
     const isStop = m.impact && /^parada/i.test(m.impact.trim());
     const impLine = m.impact
@@ -1187,12 +1187,12 @@ function renderList() {
         <div class="mat-cob ${tc[m.estado]||"dot-g-text"}">${m.estado==="SIN_CONSUMO"?"Inv.":m.adu_plan>0?(m.cob_hoy>998?"&#x221e;":m.cob_hoy+"d"):"—"}</div>
       </div>
     </div>`;
-  }).join("") || `<div class="empty">Sin resultados</div>`;
-  const selTxt = selMat.size ? ` · ${selMat.size} seleccionado${selMat.size>1?"s":""}` : "";
-  const multiTxt = isMulti() ? ` <span style="font-size:9px;color:var(--tx3)">(${centrosSel.size} centros)</span>` : "";
+  }).join("") || `<div class="empty">No results</div>`;
+  const selTxt = selMat.size ? ` · ${selMat.size} selected` : "";
+  const multiTxt = isMulti() ? ` <span style="font-size:9px;color:var(--tx3)">(${centrosSel.size} plants)</span>` : "";
   document.getElementById("filter-count").innerHTML =
-    `${ms.length} materiales${multiTxt}${selTxt}` +
-    (selMat.size ? ` <span style="cursor:pointer;color:var(--red);margin-left:6px" title="Limpiar selección" onclick="selMat=new Set();selSemMat=null;renderList();renderMainTab()">&#10005;</span>` : "");
+    `${ms.length} materials${multiTxt}${selTxt}` +
+    (selMat.size ? ` <span style="cursor:pointer;color:var(--red);margin-left:6px" title="Clear selection" onclick="selMat=new Set();selSemMat=null;renderList();renderMainTab()">&#10005;</span>` : "");
 }
 
 // ── Render: Inventory table ──────────────────────────────────────────────────
@@ -1236,7 +1236,7 @@ function renderInventario() {
       ${scv}
       <td class="zona"><span class="zona-badge ${zc.cls}">${zc.lbl}</span></td>
     </tr>`;
-  }).join("") || `<tr><td colspan="100" class="empty">Sin materiales para los filtros actuales</td></tr>`;
+  }).join("") || `<tr><td colspan="100" class="empty">No materials match current filters</td></tr>`;
 
   // ── Totales por UM ──────────────────────────────────────────────────────────
   const umMap = {};
@@ -1255,7 +1255,7 @@ function renderInventario() {
     .map(([um, t]) => {
       const cob = t.adu > 0 ? Math.round(t.saldo / t.adu) + "d" : "—";
       return `<tr>
-        <td class="tot-label">${t.n} materiales</td>
+        <td class="tot-label">${t.n} materials</td>
         <td class="tot-label">TOTAL</td>
         <td class="tot-um">${um}</td>
         <td class="num tot-v">${fmt(t.inv_ini)}</td>
@@ -1276,16 +1276,16 @@ function renderInventario() {
   const nQ30   = 0;
   const diagInv =
     `<div class="tab-diag-bar">` +
-    (nCrit>0 ? `<span class="tdb-chip tdb-r">&#9660; ${nCrit} CR&Iacute;TICOS</span>` : "") +
+    (nCrit>0 ? `<span class="tdb-chip tdb-r">&#9660; ${nCrit} CRITICAL</span>` : "") +
     (nRisk>0 ? `<span class="tdb-chip tdb-y">&#9650; ${nRisk} at risk</span>` : "") +
-    (nQ30>0  ? `<span class="tdb-chip tdb-r">&#9888; ${nQ30} stockout in &le;30d sin OC</span>` : "") +
+    (nQ30>0  ? `<span class="tdb-chip tdb-r">&#9888; ${nQ30} stockout in &le;30d no PO</span>` : "") +
     (nCrit===0&&nRisk===0 ? `<span class="tdb-chip tdb-g">&#10003; No criticals or risks</span>` : "") +
     `</div>`;
 
-  const cHdr1 = multi ? `<th class="col-centro" rowspan="2">Centro</th>` : "";
+  const cHdr1 = multi ? `<th class="col-centro" rowspan="2">Plant</th>` : "";
   document.getElementById("tab-inv").innerHTML =
     diagInv +
-    `<div class="tbl-toolbar"><button class="copy-btn" onclick="copyTable(document.getElementById('tbl-inv'),'Inventory')">⧉ Copiar tabla</button></div>` +
+    `<div class="tbl-toolbar"><button class="copy-btn" onclick="copyTable(document.getElementById('tbl-inv'),'Inventory')">⧉ Copy table</button></div>` +
     `<div class="table-wrap"><table id="tbl-inv" class="inv-table">
     <thead>
     <tr>
@@ -1365,14 +1365,14 @@ function renderOCSol() {
   document.getElementById("tab-oc").innerHTML = `
     <div class="tab-oc-summary">
       <div class="tos-group">
-        <span class="tos-lbl">&#x1F4E6; OC</span>
+        <span class="tos-lbl">&#x1F4E6; POs</span>
         <div class="tos-card tos-r"><span class="tos-v">${ocAtrL.length}</span><span class="tos-l">Atrasadas</span></div>
         <div class="tos-card tos-y"><span class="tos-v">${ocVcrL.length}</span><span class="tos-l">Vencen &le;21d <span style="color:var(--tx3)">(${ocV7L.length} en &le;7d)</span></span></div>
         <div class="tos-card tos-g"><span class="tos-v">${ocRestoL}</span><span class="tos-l">&gt;21d</span></div>
       </div>
       <div class="tos-sep"></div>
       <div class="tos-group">
-        <span class="tos-lbl">&#x1F4CB; SOLPEDs</span>
+        <span class="tos-lbl">&#x1F4CB; PRsPEDs</span>
         <div class="tos-card"><span class="tos-v">${solTot}</span><span class="tos-l">Abiertas</span></div>
         <div class="tos-card ${solSLtot>0?"tos-r":"tos-g"}"><span class="tos-v">${solSLtot}</span><span class="tos-l">Unreleased</span></div>
         <div class="tos-card tos-g"><span class="tos-v">${solTot - solSLtot}</span><span class="tos-l">Releaseds</span></div>
@@ -1390,7 +1390,7 @@ function renderOCSol() {
     </div>
     ${ocTab==="oc"
     ? `<div class="tbl-toolbar">
-         <button class="copy-btn" onclick="copyTable(document.getElementById('tbl-oc'),'OC Abiertas')">⧉ Copiar OC</button>
+         <button class="copy-btn" onclick="copyTable(document.getElementById('tbl-oc'),'OC Abiertas')">⧉ Copy POs</button>
          <button class="copy-btn" style="background:#1e6b3a;border-color:#1e6b3a;color:#fff" onclick="openOCExcelModal()">&#128202; Excel</button>
          <span style="margin-left:auto;display:flex;align-items:center;gap:6px;font-size:11px;color:var(--tx3)">
            Ordenar:
@@ -1413,7 +1413,7 @@ function renderOCSol() {
         <tbody>${ocRows}</tbody>
       </table></div>`
     : `<div class="tbl-toolbar">
-         <button class="copy-btn" onclick="copyTable(document.getElementById('tbl-sol'),'SOLPEDs')">⧉ Copiar SOLPEDs</button>
+         <button class="copy-btn" onclick="copyTable(document.getElementById('tbl-sol'),'SOLPEDs')">⧉ Copy PRs</button>
          <button class="copy-btn" style="background:#1e6b3a;border-color:#1e6b3a;color:#fff" onclick="openOCExcelModal()">&#128202; Excel</button>
          <span style="margin-left:12px;display:flex;align-items:center;gap:4px">
            <button class="sol-lib-btn filter-imp-btn ${filterSolLib==='ALL'?'active':''}" onclick="setFilterSolLib('ALL',this)">📋 Todas</button>
@@ -1447,13 +1447,13 @@ function renderCal() {
   const nAmar   = ms.filter(m => m.sabados[0]?.color==="Y").length;
   const diagCal =
     `<div class="tab-diag-bar">` +
-    (nRojo>0 ? `<span class="tdb-chip tdb-r">&#9660; ${nRojo} en rojo pr&oacute;x. semana</span>` : "") +
-    (nAmar>0 ? `<span class="tdb-chip tdb-y">&#9650; ${nAmar} en amarillo pr&oacute;x. semana</span>` : "") +
-    (nRojo===0&&nAmar===0 ? `<span class="tdb-chip tdb-g">&#10003; Sem. pr&oacute;xima sin cr&iacute;ticos</span>` : "") +
+    (nRojo>0 ? `<span class="tdb-chip tdb-r">&#9660; ${nRojo} in red next week</span>` : "") +
+    (nAmar>0 ? `<span class="tdb-chip tdb-y">&#9650; ${nAmar} in yellow next week</span>` : "") +
+    (nRojo===0&&nAmar===0 ? `<span class="tdb-chip tdb-g">&#10003; No criticals next week</span>` : "") +
     `<div style="flex:1"></div>` +
     `<div class="view-toggle">` +
-    `<button class="view-toggle-btn ${calView==="cal"?"active":""}" onclick="setCalView('cal')">&#128197; Calendario</button>` +
-    `<button class="view-toggle-btn ${calView==="list"?"active":""}" onclick="setCalView('list')">&#128202; Lista</button>` +
+    `<button class="view-toggle-btn ${calView==="cal"?"active":""}" onclick="setCalView('cal')">&#128197; Calendar</button>` +
+    `<button class="view-toggle-btn ${calView==="list"?"active":""}" onclick="setCalView('list')">&#128202; List</button>` +
     `</div></div>`;
   document.getElementById("cal-diag").innerHTML = diagCal;
 
@@ -1494,7 +1494,7 @@ function renderCal() {
         <span class="cal-cob ${tc[m.estado]||"dot-g-text"}">${m.adu_plan>0?(m.cob_hoy>998?"&#x221e;":m.cob_hoy+"d"):"—"}</span>
         <span class="trend-ico ${trendArrow(m).cls}" title="${trendArrow(m).title}">${trendArrow(m).sym}</span>
       </td>${dots}</tr>`;
-  }).join("") || `<tr><td colspan="100" class="empty">Sin materiales</td></tr>`;
+  }).join("") || `<tr><td colspan="100" class="empty">No materials</td></tr>`;
 
   document.getElementById("cal-table-wrap").innerHTML =
     `<table class="cal-table">
@@ -1549,7 +1549,7 @@ function renderCalList(ms) {
       <td class="${t.cls}" title="${t.title}" style="padding:5px 8px;width:24px;text-align:center;font-size:12px">${t.sym}</td>
       <td style="padding:5px 8px;width:90px">${badgeEstado(m.estado)}</td>
     </tr>`;
-  }).join("") || `<tr><td colspan="6" class="empty">Sin materiales</td></tr>`;
+  }).join("") || `<tr><td colspan="6" class="empty">No materials</td></tr>`;
 
   document.getElementById("cal-table-wrap").innerHTML =
     `<table style="border-collapse:collapse;width:100%;font-size:12px">
@@ -1617,9 +1617,9 @@ function renderSemPanel() {
 
   document.getElementById("sdp-mat-title").textContent = m.mat + " \u2014 " + truncate(m.desc, 42);
   const quiebreLabel = (m.quiebre_12sem && m.estado==="CRITICO")
-    ? ` <span class="quiebre-tag" style="font-size:10px">&#9670; QUIEBRE &le;12S</span>`
+    ? ` <span class="quiebre-tag" style="font-size:10px">&#9670; SHORTAGE &le;12W</span>`
     : (m.quiebre_12sem && m.estado==="ALERTA")
-      ? ` <span class="quiebre-lt-tag" style="font-size:10px">&#9650; QUIEBRE + LT OK${m.primer_quiebre_dias?` (${m.primer_quiebre_dias}d)`:""}</span>`
+      ? ` <span class="quiebre-lt-tag" style="font-size:10px">&#9650; SHORTAGE + LT OK${m.primer_quiebre_dias?` (${m.primer_quiebre_dias}d)`:""}</span>`
       : "";
   document.getElementById("sdp-estado").innerHTML =
     `<span class="lib-badge ${ec}">${m.estado}</span>${quiebreLabel}`;
@@ -2094,7 +2094,7 @@ function updateRptCentroLabel() {
   const visible = _rptVisibleCentros();
   const n = [..._rptCentroSel].filter(k => visible.includes(k)).length;
   if (n === 0) { lbl.textContent = "Ningún centro"; return; }
-  if (n >= visible.length) { lbl.textContent = "Todos los centros"; return; }
+  if (n >= visible.length) { lbl.textContent = "All plants"; return; }
   const names = [..._rptCentroSel].filter(k => visible.includes(k)).map(k => DATA.centros[k]?.nombre || k);
   lbl.textContent = names.slice(0,2).join(", ") + (names.length > 2 ? ` (+${names.length-2})` : "");
 }
@@ -2130,7 +2130,7 @@ function renderRptCentroPanel() {
 
   let html = `<div class="rpt-msel-item rpt-msel-all-row">
     <input type="checkbox" id="rpt-all-cb" ${allSel?"checked":""} onchange="rptToggleAll(this)">
-    <span>Todos los centros</span>
+    <span>All plants</span>
     <span class="rpt-mat-cnt">${visible.length} centros</span>
   </div>`;
 
@@ -2184,7 +2184,7 @@ document.addEventListener("click", e => {
     document.getElementById("rpt-centro-panel")?.classList.remove("open");
   }
 });
-// ── Menú desplegable Descargar Reporte ────────────────────────────────────────
+// ── Menú desplegable Download Report ────────────────────────────────────────
 function toggleRptMenu(e) {
   e.stopPropagation();
   const dd = document.getElementById("rpt-dropdown");
@@ -2196,7 +2196,7 @@ function closeRptMenu() {
 document.addEventListener("click", function(e) {
   if (!document.getElementById("rpt-menu-wrap").contains(e.target)) closeRptMenu();
 });
-// ── Reporte Impactos Planners (Excel por países) ──────────────────────────────
+// ── Impact Report (Excel por países) ──────────────────────────────
 function exportImpactosExcel() {
   const b64 = window._IMPACTOS_XLSX_B64;
   if (!b64) { alert("File not available. Regenerate dashboard."); return; }
@@ -2333,7 +2333,7 @@ function generateEmailFromModal() {
     const critRiskTbl = critRisk.length ? tbl(
       ["C&#243;digo","Descripci&#243;n","Origen","Cob.","Impacto","Pr&#243;x. suministro","Cantidad","Acci&#243;n"],
       critRiskRows, ["85px","","55px","50px","90px","95px","80px",""]
-    ) : `<div style="font-size:12px;color:${C.grn};padding:8px 0">&#10003; Sin materiales cr&#237;ticos ni en riesgo con los filtros aplicados</div>`;
+    ) : `<div style="font-size:12px;color:${C.grn};padding:8px 0">&#10003; No critical or at-risk materials with current filters</div>`;
 
     // — OC section —
     const ocImpRow=(label,list,color)=>list.length?`<tr style="border-bottom:1px solid ${C.brd}">
@@ -2748,7 +2748,7 @@ function exportReport(centroKeys, sections, estados, origen) {
     const estLabel = (inclSet ? Array.from(inclSet).join(" · ") : "Todos los estados") + origenLabel;
     const semSection = sections.semaforo
       ? "<h3>Sem&aacute;foro por l&iacute;nea &mdash; " + estLabel + " (" + semMats.length + " mat.)</h3>" +
-        (semMats.length ? semTablas : "<p style='color:#999;font-size:8px;margin:4px 8px'>Sin materiales para los estados seleccionados</p>")
+        (semMats.length ? semTablas : "<p style='color:#999;font-size:8px;margin:4px 8px'>No materials for the selected statuses</p>")
       : "";
     const ocSolSection = sections.ocSol
       ? "<h3>&#127758; Importados &mdash; " + ocImpRows.length + " OC</h3>" + ocTableImp +
@@ -2904,7 +2904,7 @@ function exportOCTabXLSX() {
   const ws = XLSX.utils.aoa_to_sheet([hdr, ...rows]);
   ws["!cols"] = [12,12,40,12,12,6,12,14,14,10,30,12,12].map(w=>({wch:w}));
   const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "OC Abiertas");
+  XLSX.utils.book_append_sheet(wb, ws, "Open POs");
   XLSX.writeFile(wb, `OC_${cd().nombre}_${DATA.meta.fecha_saldo.replace(/-/g,"")}.xlsx`);
 }
 
@@ -2925,7 +2925,7 @@ function exportSOLTabXLSX() {
   const ws = XLSX.utils.aoa_to_sheet([hdr, ...rows]);
   ws["!cols"] = [12,12,40,12,6,12,14,12].map(w=>({wch:w}));
   const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "SOLPEDs");
+  XLSX.utils.book_append_sheet(wb, ws, "PRs");
   XLSX.writeFile(wb, `SOLPEDs_${cd().nombre}_${DATA.meta.fecha_saldo.replace(/-/g,"")}.xlsx`);
 }
 
@@ -3085,7 +3085,7 @@ function exportReportXLSX(centroKeys, sections, estados, origen) {
     }
   });
 
-  if (wb.SheetNames.length <= 1) { alert("No hay datos para los filtros seleccionados."); return; }
+  if (wb.SheetNames.length <= 1) { alert("No data for the selected filters."); return; }
   const fname = `supply_planner_${DATA.meta.fecha_saldo.replace(/-/g,"")}.xlsx`;
   XLSX.writeFile(wb, fname);
 }
@@ -3110,17 +3110,17 @@ window.onload = () => {
 <!-- Modal selección de centros para PDF -->
 <div id="report-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9999;align-items:center;justify-content:center">
   <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:10px;padding:28px 32px;min-width:360px;max-width:500px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 40px #0007">
-    <div style="font-size:15px;font-weight:700;color:var(--tx1);margin-bottom:6px">&#128196; Generar Reporte PDF</div>
+    <div style="font-size:15px;font-weight:700;color:var(--tx1);margin-bottom:6px">&#128196; Generate Report</div>
 
     <!-- País -->
-    <div style="font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Pa&#237;s</div>
+    <div style="font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Country</div>
     <div class="rpt-country-bar" id="rpt-country-bar"></div>
     <!-- Centros -->
-    <div style="font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Centros</div>
+    <div style="font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Plants</div>
     <div style="margin-bottom:18px">
       <div class="rpt-msel-wrap">
         <button class="rpt-msel-btn" id="rpt-centro-btn" onclick="toggleRptCentroPanel(event)">
-          <span id="rpt-centro-label">Todos los centros</span>
+          <span id="rpt-centro-label">All plants</span>
           <span style="color:var(--tx2);font-size:10px">&#9660;</span>
         </button>
         <div class="rpt-msel-panel" id="rpt-centro-panel">
@@ -3134,41 +3134,41 @@ window.onload = () => {
     </div>
 
     <!-- Secciones -->
-    <div style="font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Secciones a incluir</div>
+    <div style="font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Sections to include</div>
     <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px">
       <label style="display:flex;align-items:center;gap:10px;cursor:pointer;color:var(--tx1);font-size:12px">
         <input type="checkbox" id="rpt-sec-sem" checked style="width:15px;height:15px;cursor:pointer;accent-color:#3ecf8e">
-        &#127939; Sem&aacute;foro de materiales
+        &#127939; Material Stoplight
       </label>
       <label style="display:flex;align-items:center;gap:10px;cursor:pointer;color:var(--tx1);font-size:12px">
         <input type="checkbox" id="rpt-sec-ocsol" checked style="width:15px;height:15px;cursor:pointer;accent-color:#3ecf8e">
-        &#128666; OC &amp; SOLPEDs abiertas
+        &#128666; Open POs &amp; PRs
       </label>
     </div>
 
-    <!-- Origen del material -->
-    <div style="font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Origen del material</div>
+    <!-- Material origin -->
+    <div style="font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Material origin</div>
     <div style="display:flex;gap:16px;margin-bottom:18px">
       <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--tx1);font-size:12px">
         <input type="radio" name="rpt-origen" value="ALL" checked style="accent-color:#3ecf8e;cursor:pointer;width:14px;height:14px">
-        <b>Todos</b>
+        <b>All</b>
       </label>
       <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--tx1);font-size:12px">
         <input type="radio" name="rpt-origen" value="IMP" style="accent-color:#7c5cbf;cursor:pointer;width:14px;height:14px">
-        <span style="background:#7c5cbf;color:#fff;border-radius:4px;padding:1px 7px;font-size:10px;font-weight:700">IMPORTADO</span>
+        <span style="background:#7c5cbf;color:#fff;border-radius:4px;padding:1px 7px;font-size:10px;font-weight:700">IMPORTED</span>
       </label>
       <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--tx1);font-size:12px">
         <input type="radio" name="rpt-origen" value="NAC" style="accent-color:#3ecf8e;cursor:pointer;width:14px;height:14px">
-        <span style="background:#1e6b3a;color:#3ecf8e;border-radius:4px;padding:1px 7px;font-size:10px;font-weight:700">NACIONAL</span>
+        <span style="background:#1e6b3a;color:#3ecf8e;border-radius:4px;padding:1px 7px;font-size:10px;font-weight:700">DOMESTIC</span>
       </label>
     </div>
 
     <!-- Estados -->
-    <div style="font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Estados a incluir</div>
+    <div style="font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Statuses to include</div>
     <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
       <label style="display:flex;align-items:center;gap:10px;cursor:pointer;color:var(--tx1);font-size:12px">
         <input type="checkbox" id="rpt-est-todos" checked style="width:15px;height:15px;cursor:pointer;accent-color:#3ecf8e" onchange="rptEstToggleAll(this.checked)">
-        <b>Todos los estados</b>
+        <b>All statuses</b>
       </label>
       <div id="rpt-est-detail" style="display:none;flex-direction:column;gap:8px;padding-left:24px">
         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--tx1);font-size:12px">
@@ -3189,16 +3189,16 @@ window.onload = () => {
         </label>
         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--tx1);font-size:12px">
           <input type="checkbox" id="rpt-est-sc" style="width:14px;height:14px;cursor:pointer;accent-color:#7c8aaa">
-          <span style="background:#7c8aaa;color:#fff;border-radius:4px;padding:1px 7px;font-size:10px;font-weight:700">INV. SIN CONSUMO</span>
+          <span style="background:#7c8aaa;color:#fff;border-radius:4px;padding:1px 7px;font-size:10px;font-weight:700">NO DEMAND</span>
         </label>
       </div>
     </div>
 
     <div style="display:flex;gap:8px;align-items:center">
-      <button class="btn" style="background:var(--bg3);margin-right:auto" onclick="closeReportModal()">Cancelar</button>
+      <button class="btn" style="background:var(--bg3);margin-right:auto" onclick="closeReportModal()">Cancel</button>
       <button class="btn" style="background:#1e6b3a;color:#fff;font-weight:700" onclick="generateSelectedXLSX()">&#128202; Excel</button>
-      <button class="btn" style="background:#1a4a7a;color:#fff;font-weight:700" onclick="generateEmailFromModal()">&#128140; Preparar Email</button>
-      <button class="btn" style="background:#3ecf8e;color:#0f1117;font-weight:700" onclick="generateSelectedReport()">&#128196; Generar PDF</button>
+      <button class="btn" style="background:#1a4a7a;color:#fff;font-weight:700" onclick="generateEmailFromModal()">&#128140; Prepare Email</button>
+      <button class="btn" style="background:#3ecf8e;color:#0f1117;font-weight:700" onclick="generateSelectedReport()">&#128196; Generate PDF</button>
     </div>
   </div>
 </div>
@@ -3214,35 +3214,35 @@ function rptEstToggleAll(checked) {
 <!-- Modal Export OC Excel -->
 <div id="oc-excel-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9999;align-items:center;justify-content:center">
   <div style="background:var(--bg1);border:1px solid var(--brd);border-radius:10px;padding:28px 32px;min-width:360px;max-width:500px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 40px #0007">
-    <div style="font-size:15px;font-weight:700;color:var(--tx1);margin-bottom:6px">&#128202; Export OC &amp; SOLPEDs — Excel</div>
+    <div style="font-size:15px;font-weight:700;color:var(--tx1);margin-bottom:6px">&#128202; Export POs &amp; PRs — Excel</div>
 
     <!-- Centros -->
-    <div style="font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Centros</div>
+    <div style="font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Plants</div>
     <div id="oc-excel-centro-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:8px"></div>
     <div style="display:flex;gap:8px;margin-bottom:18px">
-      <button class="btn" style="font-size:10px;padding:4px 10px" onclick="document.querySelectorAll('.oc-excel-centro-chk').forEach(c=>c.checked=true)">Todos</button>
-      <button class="btn" style="font-size:10px;padding:4px 10px" onclick="document.querySelectorAll('.oc-excel-centro-chk').forEach(c=>c.checked=false)">Ninguno</button>
+      <button class="btn" style="font-size:10px;padding:4px 10px" onclick="document.querySelectorAll('.oc-excel-centro-chk').forEach(c=>c.checked=true)">All</button>
+      <button class="btn" style="font-size:10px;padding:4px 10px" onclick="document.querySelectorAll('.oc-excel-centro-chk').forEach(c=>c.checked=false)">None</button>
     </div>
 
     <!-- Secciones -->
-    <div style="font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Incluir</div>
+    <div style="font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Include</div>
     <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px">
       <label style="display:flex;align-items:center;gap:10px;cursor:pointer;color:var(--tx1);font-size:12px">
         <input type="checkbox" id="oc-excel-inc-oc" checked style="width:15px;height:15px;cursor:pointer;accent-color:#3ecf8e">
-        &#128666; &#211;rdenes de Compra (OC)
+        &#128666; Purchase Orders (POs)
       </label>
       <label style="display:flex;align-items:center;gap:10px;cursor:pointer;color:var(--tx1);font-size:12px">
         <input type="checkbox" id="oc-excel-inc-sol" checked style="width:15px;height:15px;cursor:pointer;accent-color:#3ecf8e">
-        &#128203; SOLPEDs
+        &#128203; Purchase Requisitions (PRs)
       </label>
     </div>
 
     <!-- Estados -->
-    <div style="font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Estados del material</div>
+    <div style="font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Material status</div>
     <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
       <label style="display:flex;align-items:center;gap:10px;cursor:pointer;color:var(--tx1);font-size:12px">
         <input type="checkbox" id="oc-excel-est-todos" checked style="width:15px;height:15px;cursor:pointer;accent-color:#3ecf8e" onchange="ocExcelEstToggle(this.checked)">
-        <b>Todos los estados</b>
+        <b>All statuses</b>
       </label>
       <div id="oc-excel-est-detail" style="display:none;flex-direction:column;gap:8px;padding-left:24px">
         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--tx1);font-size:12px">
@@ -3263,31 +3263,31 @@ function rptEstToggleAll(checked) {
         </label>
         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--tx1);font-size:12px">
           <input type="checkbox" id="oc-excel-est-sc" checked style="width:14px;height:14px;cursor:pointer;accent-color:#7c8aaa">
-          <span style="background:#7c8aaa;color:#fff;border-radius:4px;padding:1px 7px;font-size:10px;font-weight:700">INV. SIN CONSUMO</span>
+          <span style="background:#7c8aaa;color:#fff;border-radius:4px;padding:1px 7px;font-size:10px;font-weight:700">NO DEMAND</span>
         </label>
       </div>
     </div>
 
-    <!-- Origen del material -->
-    <div style="font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Origen del material</div>
+    <!-- Material origin -->
+    <div style="font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Material origin</div>
     <div style="display:flex;gap:16px;margin-bottom:20px">
       <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--tx1);font-size:12px">
         <input type="radio" name="oc-excel-origen" value="ALL" checked style="accent-color:#3ecf8e;cursor:pointer;width:14px;height:14px">
-        <b>Todos</b>
+        <b>All</b>
       </label>
       <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--tx1);font-size:12px">
         <input type="radio" name="oc-excel-origen" value="IMP" style="accent-color:#7c5cbf;cursor:pointer;width:14px;height:14px">
-        <span style="background:#7c5cbf;color:#fff;border-radius:4px;padding:1px 7px;font-size:10px;font-weight:700">IMPORTADO</span>
+        <span style="background:#7c5cbf;color:#fff;border-radius:4px;padding:1px 7px;font-size:10px;font-weight:700">IMPORTED</span>
       </label>
       <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--tx1);font-size:12px">
         <input type="radio" name="oc-excel-origen" value="NAC" style="accent-color:#3ecf8e;cursor:pointer;width:14px;height:14px">
-        <span style="background:#1e6b3a;color:#3ecf8e;border-radius:4px;padding:1px 7px;font-size:10px;font-weight:700">NACIONAL</span>
+        <span style="background:#1e6b3a;color:#3ecf8e;border-radius:4px;padding:1px 7px;font-size:10px;font-weight:700">DOMESTIC</span>
       </label>
     </div>
 
     <div style="display:flex;gap:10px;justify-content:flex-end">
-      <button class="btn" style="background:var(--bg3)" onclick="document.getElementById('oc-excel-modal').style.display='none'">Cancelar</button>
-      <button class="btn" style="background:#1e6b3a;color:#fff;font-weight:700" onclick="runOCExcelExport()">&#128202; Descargar Excel</button>
+      <button class="btn" style="background:var(--bg3)" onclick="document.getElementById('oc-excel-modal').style.display='none'">Cancel</button>
+      <button class="btn" style="background:#1e6b3a;color:#fff;font-weight:700" onclick="runOCExcelExport()">&#128202; Download Excel</button>
     </div>
   </div>
 </div>
@@ -3383,7 +3383,7 @@ function runOCExcelExport() {
 
 def build_impactos_xlsx_b64(country_centros: list, fecha_saldo: str) -> str:
     """
-    Genera el Excel "Reporte Impactos Planners" con hojas por país.
+    Genera el Excel "Impact Report" con hojas por país.
 
     Parameters
     ----------
@@ -3471,7 +3471,7 @@ def build_impactos_xlsx_b64(country_centros: list, fecha_saldo: str) -> str:
                 row += 1
 
         if row == 2:  # No datas — agregar fila guía
-            ws.cell(row=2, column=1, value="(Sin materiales críticos o en riesgo)").font = Font(
+            ws.cell(row=2, column=1, value="(No critical or at-risk materials)").font = Font(
                 italic=True, color="888888", size=9, name="Calibri")
 
     buf = io.BytesIO()
@@ -3513,7 +3513,7 @@ def write_html(json_str: str, out_path: Path, impactos_b64: str = "") -> None:
     out_path : Path
         Destination file (typically supply_planner_v5.html).
     impactos_b64 : str
-        Base64-encoded XLSX for Reporte Impactos Planners.
+        Base64-encoded XLSX for Impact Report.
     """
     html = HTML_TEMPLATE.replace("/*DATA_PLACEHOLDER*/", json_str)
     html = html.replace("/*IMPACTOS_B64_PLACEHOLDER*/", impactos_b64)

@@ -140,14 +140,15 @@ def load_all_data(datos_path: Path) -> dict:
         print(f"  Lineas fab.: {len(df_lin)} filas | centros: {sorted(df_lin['_centro'].unique().tolist())}")
 
         # ── Centros master (hoja "Centros" del mismo archivo) ────────────────
-        # Fallback flags por nombre de país (para Excels sin columna Flag)
         _FLAG_FALLBACK = {
-            "Argentina": "AR", "Brasil": "BR", "Colombia": "CO",
-            "Perú": "PE", "Peru": "PE", "Chile": "CL",
+            "Argentina": "AR", "Brasil": "BR", "Brazil": "BR",
+            "Colombia": "CO", "Perú": "PE", "Peru": "PE", "Chile": "CL",
+        }
+        _COUNTRY_EN = {
+            "Brasil": "Brazil", "Perú": "Peru",
         }
         try:
             _df_c = pd.read_excel(_lin_file, sheet_name="Centros")
-            # Detect if Flag column exists (col D / index 3)
             _has_flag_col = _df_c.shape[1] >= 4
             centros_master = {}
             for _, _row in _df_c.iterrows():
@@ -155,7 +156,7 @@ def load_all_data(datos_path: Path) -> dict:
                     _code = int(float(_row.iloc[1]))
                 except Exception:
                     continue
-                _pais = str(_row.iloc[0]).strip()
+                _pais = _COUNTRY_EN.get(str(_row.iloc[0]).strip(), str(_row.iloc[0]).strip())
                 _desc = str(_row.iloc[2]).strip()
                 _short = _desc.split(" - ")[-1].strip() if " - " in _desc else _desc
                 if _has_flag_col and pd.notna(_row.iloc[3]) and str(_row.iloc[3]).strip():
